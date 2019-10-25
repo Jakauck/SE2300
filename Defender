@@ -1,1 +1,219 @@
-Paste code here
+# Defender - part 1
+# Set up screen
+import turtle
+import os
+import tkinter as tk
+import tkinter
+import sys
+import os
+from PIL import Image, ImageTk
+import math
+
+
+# Draw border
+def start():
+    wn = turtle.Screen()
+    # amul=turtle.Turtle()
+    wn.bgcolor("black")
+    # wn.bgpic("background_picture2.gif")
+    wn.title("Defender")
+    border_pen = turtle.Turtle()
+    border_pen.speed(0)
+    border_pen.color("white")
+    border_pen.penup()
+    border_pen.setposition(-300, -300)
+    border_pen.pendown()
+    border_pen.pensize(3)
+    for side in range(4):
+        border_pen.fd(600)
+        border_pen.lt(90)
+    border_pen.hideturtle()
+
+    # Create the player turtle
+    player = turtle.Turtle()
+    player.color("blue")
+    player.shape("triangle")
+    player.penup()
+    player.speed(0)
+    player.setposition(0, -250)
+    player.setheading(90)
+
+    playerspeed = 15
+
+    # Create the enemy
+    enemy = turtle.Turtle()
+    enemy.color("red")
+    enemy.shape("circle")
+    enemy.penup()
+    enemy.speed(0)
+    enemy.setposition(-200, 250)
+
+    enemyspeed = 2
+
+    # creat player's bullets
+    bullet = turtle.Turtle()
+    bullet.color("yellow")
+    bullet.shape("triangle")
+    bullet.penup()
+    bullet.speed(0)
+    bullet.setheading(90)
+    bullet.shapesize(0.1, 1)
+    bullet.hideturtle()
+
+    bulletspeed = 20
+    # define bullet state
+    # ready to ready to fire
+    # fire to bullet is firing
+    bulletstate = "ready"
+
+    # Move the player left and right
+    def move_left():
+        x = player.xcor()
+        x -= playerspeed
+        if x < -280:
+            x = - 280
+        player.setx(x)
+
+    def move_right():
+        x = player.xcor()
+        x += playerspeed
+        if x > 280:
+            x = 280
+        player.setx(x)
+
+    def move_up():
+        y = player.ycor()
+        y += playerspeed
+        if y < -280:
+            y = - 280
+        player.sety(y)
+
+    def move_down():
+        y = player.ycor()
+        y -= playerspeed
+        if y < -280:
+            y = - 280
+        player.sety(y)
+
+    def fire_bullet():
+        # Declare bulletstate as a global if it needs change
+        global bulletstate
+        # os.system("afplay laser.wav&")
+        # for linux use os.system("aplay laser.wav&")
+        # Move the bullet to just above the player
+        bulletstate = "fire"
+        x = player.xcor()
+        y = player.ycor() + 10
+        bullet.setposition(x, y)
+        bullet.showturtle()
+
+    def isCollision(t1, t2):
+        distance = math.sqrt(math.pow(t1.xcor() - t2.xcor(), 2) + math.pow(t1.ycor() - t2.ycor(), 2))
+        if distance < 15:
+            return True
+        else:
+            return False
+
+    # Create keyboard bindings
+    turtle.listen()
+    turtle.onkey(move_left, "Left")
+    turtle.onkey(move_right, "Right")
+    turtle.onkey(move_up, "Up")
+    turtle.onkey(move_down, "Down")
+    turtle.onkey(fire_bullet, "space")
+
+    # Main game loop
+    while True:
+
+        # Move the enemy
+        x = enemy.xcor()
+        x += enemyspeed
+        enemy.setx(x)
+
+        # Move the enemy back and down
+        if enemy.xcor() > 280:
+            y = enemy.ycor()
+            y -= 40
+            enemyspeed *= -1
+            enemy.sety(y)
+
+        if enemy.xcor() < -280:
+            y = enemy.ycor()
+            y -= 40
+            enemyspeed *= -1
+            enemy.sety(y)
+
+        # move the bullet
+        y = bullet.ycor()  # Set the coordinate movement of the bullet
+        y += bulletspeed  # Let the bullets advance according to the set speed
+        bullet.sety(y)  # Display the bullet postion
+        # check to see if the bullet has gone to the top
+        # Move the bullet only when bulletstate is "fire"
+        if bulletstate == "fire":
+            y = bullet.ycor()
+            y = y + bulletspeed
+            bullet.sety(y)
+
+        # Check to see if bullet has reached the top
+        if bullet.ycor() > 275:
+            bullet.hideturtle()
+            bulletstate = "ready"
+
+        # check for a collision between the bullet and the enemy
+        if isCollision(bullet, enemy):
+            # reset the bullet
+            bullet.hideturtle()
+            bulletstate = "ready"
+            bullet.setposition(0, -400)
+            # reset the enemy
+            enemy.setposition(-200, 250)
+
+        if isCollision(player, enemy):
+            # If a collision occurs, the player dies
+            player.hideturtle()
+            enemy.hideturtle()
+            print("GAME OVER")
+            break
+
+    B3 = tkinter.Button(BT, text="Exit", command=exit)
+    B3.pack()
+
+
+def volume():
+    r
+
+
+def options():
+    volume = tkinter.Tk()
+    volume.title("Volume")
+    B4 = tkinter.Button(volume, text="Volume", command=volume)
+    B4.pack()  # options
+    volume.mainloop()
+
+
+def exit():
+    raise SystemExit
+    wn.destroy()
+
+
+image = 'first_pic.png'  # Qpen picture
+BT = tkinter.Tk()
+BT.title("Defender")
+BG = tkinter.Canvas(BT, width=600,
+                    height=600)  # Create a drawing board and set its length, width, height and background color
+BG.pack()
+im = ImageTk.PhotoImage(file=image)  # Call picture
+BG.create_image(300, 300, image=im)  # Set the size of the referenced image
+B1 = tkinter.Button(BT, background='BROWN', text="Start", anchor='center', width=10, height=2, command=start)
+B1_window = BG.create_window(300, 300, anchor='center', window=B1)
+
+B2 = tkinter.Button(BT, background='YELLOW', text="Options", anchor='center', width=10, height=2, command=options)
+B2_window = BG.create_window(300, 350, anchor='center', window=B2)
+
+B3 = tkinter.Button(BT, background='BROWN', text="Exit", anchor='center', width=10, height=2,
+                    command=exit)  # setting the color of my buttons
+B3_window = BG.create_window(300, 400, anchor='center', window=B3)
+BG.pack()
+BT.mainloop()
+
+delay = input("Press enter to finish.")
