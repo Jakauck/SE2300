@@ -1,0 +1,116 @@
+Paste Code Here
+/**
+ * Background
+ */
+import javax.swing.ImageIcon;
+import javax.swing.JPanel;
+import java.awt.*;
+import java.awt.event.*;
+///////////////////////////////////////////////////////////////////////////
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+/**
+ * Image Icon
+ */
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.net.URL;
+//////////////////////////////////////////////////////////////////////////
+
+
+
+public class Windows extends JFrame {
+	
+public Windows() {
+/**
+* for change window size and location
+*/
+	this.setTitle("Galaxian");//Window Title
+	this.setLocation(500,300);// Window location(x,y)
+    this.setSize(1160,690);// Window size(length,wide)
+    this.setVisible(true);// window visible or not
+this.addWindowListener(new WindowAdapter(){
+    	public void windowClosing(WindowEvent e) {
+    		System.exit(0);// close window
+
+    	}
+    });
+////////////////////////////////////////////////////////////////////////////////
+/**
+ * set background method
+ */
+	setBak();
+	Container c=getContentPane();
+	JPanel jp=new JPanel();
+	jp.setOpaque(false);
+	c.add(jp);
+//////////////////////////////////////////////////////////////////
+/**
+* put in buttons
+*/
+	JButton a1=new JButton();
+	JButton a2=new JButton();
+	setLayout(null);
+	a1=new JButton("Start");
+	a1.setBounds(440,322,215,70);
+	a1.setFont(new Font("black",Font.BOLD,30));
+	a1.setForeground(Color.red);
+	a2=new JButton("Exit");
+	a2.setBounds(442,422,215,70);
+	a2.setFont(new Font("black",Font.BOLD,30));
+	a2.setForeground(Color.yellow);
+	add(a1);
+	add(a2);
+////////////////////////////////////////////////////////////////
+/**
+ * add new window
+ */
+	a1.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			new Window2();
+			setVisible(false);
+		}
+	});
+/**
+ * push the button for close the window.	
+ */
+	a2.addActionListener(new ActionListener() {
+		public void actionPerformed(ActionEvent e) {
+			dispose();
+			setForeground(Color.black);
+			System.exit(0);
+		}
+	});
+/////////////////////////////////////////////////////////////////	
+/**
+ * change the Icon
+ */
+	URL url=getClass().getResource("ImageIcon/download.png");
+	Image img=Toolkit.getDefaultToolkit().getImage(url);
+	setIconImage(img);
+	
+}
+///////////////////////////////////////////////////////////////////////
+/**
+ * put in background image.
+ */
+public void setBak() {
+	((JPanel)this.getContentPane()).setOpaque(false);
+	URL url=getClass().getResource("Background/Galaxian.png");
+	ImageIcon img=new ImageIcon(url);
+	JLabel background=new JLabel(img);
+	this.getLayeredPane().add(background,new Integer(Integer.MIN_VALUE));
+	background.setBounds(0,0,img.getIconWidth(),img.getIconHeight());
+}
+
+//////////////////////////////////////////////////////////////////////////////////////
+
+/**
+* Main function
+*/
+public static void main(String[] args){
+// TODO Auto-generated method stub
+Windows f=new Windows();
+   }
+}
