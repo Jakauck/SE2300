@@ -1,0 +1,169 @@
+import java.awt.Color;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Image;
+import java.awt.Toolkit;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.ImageObserver;
+import java.net.URL;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.WindowConstants;
+
+public class Window2 extends JFrame {
+
+//////////////////////////////////////////////////////////////////////
+	
+	int x1=500,y1=450;
+	int x2=500,y2=60;
+	int speed=3;
+    private JTextField textField2 = new JTextField(45);
+    int t1=0,x=1;
+    private boolean TT = true; 
+
+/////////////////////////////////////////////////////////////////
+	public Window2(){
+		setLayout(null);
+		this.setName("Galaxian");
+		this.setSize(1160,690);
+		this.setLocation(500,300);
+		this.setVisible(true);
+		setFont(new Font("black",Font.BOLD,30));
+		
+		Container c = getContentPane(); 
+		JButton a1=new JButton("Return");
+		JButton a2=new JButton("Stop");
+		JButton b1 = new JButton("Start");
+		JButton b8 = new JButton("Restart");
+		JButton bt=new JButton();
+		a1.setBounds(1040, 50, 80, 30);
+		add(a1);
+		
+		a2.setBounds(1040,10,80,30);
+		add(a2);
+		
+		b1.setBounds(1040,90,80,30);
+		b8.setBounds(1040,130,80,30);
+		c.add(b1);c.add(b8);
+		
+		ImageIcon icon=new ImageIcon("img/Plane.png");
+		JLabel label=new JLabel(icon);
+		label.setBounds(x1,y1,106,194);
+		add(label);
+		label.requestFocus();
+		
+		ImageIcon icon1=new ImageIcon("img/Enemy.png");
+		JLabel label1 =new JLabel(icon1);
+		label1.setBounds(x2,y2,88,64);
+		add(label1);
+		
+		textField2.setFont(new Font("black",Font.BOLD,20));
+		textField2.setBackground(Color.white);
+		textField2.setBounds(0,0,150,50);
+		textField2.setEditable(false);//Those code for text box layout.
+		add(textField2);//show textbox for count time
+		textField2.setText("   count："+t1);
+		
+		
+////////////////////////////////////////////////////////////////////////////////////////////
+		
+		a1.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				new Windows();
+				setVisible(false);
+			}
+		});
+		
+		a2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Dis tt2 = new Dis();
+				tt2.sto();
+				new Menu();
+				
+			}
+		});
+
+//add start button
+		b1.addActionListener(new ActionListener(){    
+			public void actionPerformed(ActionEvent e){                    
+
+				Dis tt = new Dis();
+				tt.start();
+					}	
+			});
+
+
+//add clear button
+		b8.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e){
+				textField2.setText("   count："+"0");//reflash timer form 0 count again
+				t1=0;
+			}
+		});
+		
+
+		label.addKeyListener(new KeyAdapter(){
+			
+			public void keyPressed(KeyEvent ke) {
+				label.setBounds(x1,y1,106,194);
+				if(ke.getKeyCode()==KeyEvent.VK_RIGHT) {
+				x1+=10;}
+				else if(ke.getKeyCode()==KeyEvent.VK_LEFT) {
+				x1-=10;}
+				else if(ke.getKeyCode()==KeyEvent.VK_UP) {
+					y1-=10;
+				}
+				else if(ke.getKeyCode()==KeyEvent.VK_DOWN) {
+					y1+=10;
+				}
+				repaint();
+			}
+		});
+		
+		
+		
+	}
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	
+//count begin
+	private class Dis extends Thread{
+		public Dis(){  
+			
+		}
+		public void sto(){//make a new method stop count
+			TT=false;// judge for stop count time
+		}
+		public void run(){//make a new method start count timer
+			TT=true;//judge for start count time
+			while(TT){//set a loop for add time
+				t1++;//add 1 second
+				textField2.setText("   count："+t1);//show up on text box
+				try {//use try function make sure count 1 second.
+					Thread.sleep(1000) ;//count 1 second
+				} catch (InterruptedException e) {
+					e.printStackTrace();//make timer still running
+				}
+			}
+     }
+    }
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+}
